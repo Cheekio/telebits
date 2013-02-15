@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Main Page{% endblock %}
+{% block content %}
+<h2>Robits and Teleoperators:</h2>
+<h3>together at last</h3>
+<br />
+<br />
+{{user}}
+<br />
+<div class="row-fluid">
+	<div class="span6" >
+		<h3>Are you a robit?</h3><br />
+		<a href="/robit/{{robitrandom}}" class="btn btn-primary">I'm a robit!</a>
+	</div>
+	<div class="span6">
+		<h3>Are you a teleoperator?</h3><br />
+		<a href="/tele/{{telerandom}}" class="btn btn-primary">I'm a teleoperator!</a>
+	</div>
+</div> <!-- end of fluid row -->
+
+
+{% endblock %}

@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}Teleoperator Interface{% endblock title %}
+
+{% block content %}
+<h2>Why Hello Thar Teleoperator!</h2>
+<h3>Here should be some <em>other</em> content:</h3>
+<br />
+Your robit is connected to this page:
+<br />
+<a href="{{robitkey}}">{{robitkey}}</a>
+<br />
+<br />
+
+
+	<div id="test-div">This is a test div</div>
+	<script>
+
+		channel = new goog.appengine.Channel('{{ token }}');
+
+		var options = {
+			'onopen':function(){
+				console.log("Connection Established");
+			},
+			'onmessage':function(){
+				console.log("Message recieved");
+				app.sendAppToServer();
+			},
+			'onerror':function(){
+				console.log("Error");
+			},
+			'onclose':function(){
+				console.log("Connection Closed");
+			}
+		};
+		socket = channel.open(options);
+		var app = {
+
+			robitkey : {{robitkey}},
+			telekey : {{telekey}},
+
+			sendAppToServer: function() {
+				$.ajax({
+					type:"POST",
+					url: "/tele/{{telekey}}",
+					data: JSON.stringify(app),
+					contentType: "application/json",
+					dataType: "JSON",
+					success: function(data, textStatus, xhr){
+						console.log("ajax request accepted");
+					}
+				})
+		}
+	}
+
+	</script>
+{% endblock content %}
+

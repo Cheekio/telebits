@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block title %}Robit Interface{% endblock title %}
+
+{% block content %}
+<h2>Why Hello Thar Robit!</h2>
+<br />
+<br />
+<br />
+{{token}}
+<br />
+{{me}}
+<br />
+<h3>This is where some content <em>is</em></h3>
+Your corresponding teleoperator's controls are located here:<br />
+<a href="/tele/{{telekey}}">{{telekey}}</a>
+<br />
+<br />
+<a href="/testbutton/{{robitkey}}" class="btn btn-primary" id="testbutton">Test Button</a>
+	<script>
+
+		channel = new goog.appengine.Channel('{{token}}');
+
+		var options = {
+			'onopen':function(){
+				console.log("Connection Established");
+			},
+			'onmessage':function(){
+				console.log("Message recieved");
+			},
+			'onerror':function(){
+				console.log("Error");
+			},
+			'onclose':function(){
+				console.log("Connection Closed");
+			}
+		};
+		socket = channel.open(options);
+
+	var app = {
+
+		robitkey : {{robitkey}},
+		telekey : {{telekey}},
+
+		setupControlButtons: function() {
+			$('#testbutton').click(function(e){
+				e.preventDefault();
+				app.sendAppToServer();
+			})
+		},
+		sendAppToServer: function() {
+			$.ajax({
+				type:"POST",
+				url: "/robit/{{robitkey}}",
+				data: JSON.stringify(app),
+				contentType: "application/json",
+				dataType: "JSON",
+				success: function(data, textStatus, xhr){
+					console.log("ajax request accepted");
+				}
+			})
+		}
+	}
+	jQuery(function() {
+		app.setupControlButtons();
+	})
+
+	</script>
+{% endblock content %}
+
